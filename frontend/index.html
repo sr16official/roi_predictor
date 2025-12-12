@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rental ROI Studio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="background-orbit"></div>
+  <div class="background-gradient"></div>
+
+  <header class="app-header">
+    <div class="logo-orbit">
+      <span class="logo-dot"></span>
+      <span class="logo-ring"></span>
+    </div>
+    <div class="header-text">
+      <h1>Rental ROI Studio</h1>
+      <p>Experiment with rental listings and instantly visualize your returns.</p>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel panel-input">
+      <h2 class="panel-title">Property details</h2>
+      <form id="roi-form">
+        <div class="form-grid">
+          <label>
+            Size (sq ft)
+            <input type="number" step="0.01" id="size_sq_ft" required />
+          </label>
+          <label>
+            Property Type
+            <input type="text" id="propertyType" placeholder="Apartment, Independent Floor, ..." required />
+          </label>
+          <label>
+            Bedrooms
+            <input type="number" id="bedrooms" min="0" required />
+          </label>
+          <label>
+            Latitude
+            <input type="number" step="0.000001" id="latitude" required />
+          </label>
+          <label>
+            Longitude
+            <input type="number" step="0.000001" id="longitude" required />
+          </label>
+          <label>
+            Locality Name
+            <input type="text" id="localityName" required />
+          </label>
+          <label>
+            Suburb Name
+            <input type="text" id="suburbName" required />
+          </label>
+          <label>
+            City Name
+            <input type="text" id="cityName" required />
+          </label>
+          <label>
+            Company Name
+            <input type="text" id="companyName" required />
+          </label>
+          <label>
+            Closest Metro (km)
+            <input type="number" step="0.01" id="closest_metro_station_km" required />
+          </label>
+          <label>
+            AP Distance (km)
+            <input type="number" step="0.01" id="AP_dist_km" required />
+          </label>
+          <label>
+            AIIMS Distance (km)
+            <input type="number" step="0.01" id="Aiims_dist_km" required />
+          </label>
+          <label>
+            NDRLW Distance (km)
+            <input type="number" step="0.01" id="NDRLW_dist_km" required />
+          </label>
+        </div>
+        <button type="submit" class="btn primary-btn">Calculate ROI</button>
+      </form>
+      <div id="message" class="message"></div>
+    </section>
+
+    <section class="panel panel-output">
+      <h2 class="panel-title">ROI insights</h2>
+      <div id="results" class="results hidden">
+        <div class="kpi-grid">
+          <div class="kpi-card kpi-rent">
+            <span class="kpi-label">Predicted Monthly Rent</span>
+            <span class="kpi-value" id="predicted_rent"></span>
+          </div>
+          <div class="kpi-card kpi-price">
+            <span class="kpi-label">Predicted Sale Price</span>
+            <span class="kpi-value" id="predicted_price"></span>
+          </div>
+          <div class="kpi-card kpi-annual">
+            <span class="kpi-label">Annual Rent</span>
+            <span class="kpi-value" id="annual_rent"></span>
+          </div>
+          <div class="kpi-card kpi-yield">
+            <span class="kpi-label">Gross Yield (%)</span>
+            <span class="kpi-value" id="gross_yield_percent"></span>
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-card tilt">
+            <h3>Cashflow vs. Asset Value</h3>
+            <canvas id="barChart"></canvas>
+          </div>
+          <div class="chart-card tilt">
+            <h3>Yield Composition</h3>
+            <canvas id="pieChart"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="empty-state" id="empty-state">
+        <p>Run a prediction to see interactive charts and animated ROI insights.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
