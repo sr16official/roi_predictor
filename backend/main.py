@@ -1,8 +1,14 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
-from fastapi.middleware.cors import CORSMiddleware
+import os
+import pathlib
+from typing import Optional
 
-from roi_service import predict_rent, predict_price, calculate_roi
+from fastapi import Depends, FastAPI, Header, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
+
+from backend.roi_service import predict_rent, predict_price, calculate_roi
 
 
 class Listing(BaseModel):
@@ -33,25 +39,47 @@ app.add_middleware(
 )
 
 
+API_KEY = os.getenv("API_KEY")
+
+
+def require_api_key(x_api_key: Optional[str] = Header(default=None, alias="X-API-Key")) -> None:
+    if not API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Server missing API_KEY configuration",
+        )
+    if x_api_key != API_KEY:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid API key",
+        )
+
+
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
+
+
 @app.get("/")
 async def root():
-    return {"message": "Rental ROI API is up"}
+    frontend_dir = pathlib.Path(__file__).resolve().parent.parent / "frontend"
+    return FileResponse(str(frontend_dir / "index.html"))
 
 
 @app.post("/predict_rent")
-async def api_predict_rent(listing: Listing):
+async def api_predict_rent(listing: Listing, _: None = Depends(require_api_key)):
     result = predict_rent(listing.dict())
     return {"predicted_rent": float(result)}
 
 
 @app.post("/predict_price")
-async def api_predict_price(listing: Listing):
+async def api_predict_price(listing: Listing, _: None = Depends(require_api_key)):
     result = predict_price(listing.dict())
     return {"predicted_price": float(result)}
 
 
 @app.post("/calculate_roi")
-async def api_calculate_roi(listing: Listing):
+async def api_calculate_roi(listing: Listing, _: None = Depends(require_api_key)):
     result = calculate_roi(listing.dict())
     # Ensure everything is JSON serializable (cast NumPy types to Python floats)
     return {
@@ -61,3 +89,7 @@ async def api_calculate_roi(listing: Listing):
         "gross_yield": float(result["gross_yield"]),
         "gross_yield_percent": float(result["gross_yield_percent"]),
     }
+
+
+frontend_dir = pathlib.Path(__file__).resolve().parent.parent / "frontend"
+app.mount("/", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")

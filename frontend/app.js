@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = "";
 
 const form = document.getElementById("roi-form");
 const resultsDiv = document.getElementById("results");
@@ -21,6 +21,10 @@ function readNumber(id) {
 
 function readText(id) {
   return document.getElementById(id).value || "";
+}
+
+function readApiKey() {
+  return (document.getElementById("api_key")?.value || "").trim();
 }
 
 function updateCharts(data) {
@@ -144,11 +148,19 @@ form.addEventListener("submit", async (event) => {
     NDRLW_dist_km: readNumber("NDRLW_dist_km"),
   };
 
+  const apiKey = readApiKey();
+
+  if (!apiKey) {
+    messageDiv.textContent = "Enter your API key to run inference.";
+    return;
+  }
+
   try {
     const response = await fetch(`${API_BASE_URL}/calculate_roi`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "X-API-Key": apiKey,
       },
       body: JSON.stringify(payload),
     });
@@ -175,6 +187,6 @@ form.addEventListener("submit", async (event) => {
   } catch (err) {
     console.error(err);
     messageDiv.textContent =
-      "Could not calculate ROI. Make sure the backend API (FastAPI + Uvicorn) is running on http://localhost:8000 and try again.";
+      "Could not calculate ROI. Confirm the API is reachable and your API key is correct.";
   }
 });
