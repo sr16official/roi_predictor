@@ -66,27 +66,45 @@ async def root():
 
 @app.post("/predict_rent")
 async def api_predict_rent(listing: Listing, _: None = Depends(require_api_key)):
-    result = predict_rent(listing.dict())
-    return {"predicted_rent": float(result)}
+    try:
+        result = predict_rent(listing.dict())
+        return {"predicted_rent": float(result)}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Rent prediction failed: {str(e)}"
+        )
 
 
 @app.post("/predict_price")
 async def api_predict_price(listing: Listing, _: None = Depends(require_api_key)):
-    result = predict_price(listing.dict())
-    return {"predicted_price": float(result)}
+    try:
+        result = predict_price(listing.dict())
+        return {"predicted_price": float(result)}
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Price prediction failed: {str(e)}"
+        )
 
 
 @app.post("/calculate_roi")
 async def api_calculate_roi(listing: Listing, _: None = Depends(require_api_key)):
-    result = calculate_roi(listing.dict())
-    # Ensure everything is JSON serializable (cast NumPy types to Python floats)
-    return {
-        "predicted_rent": float(result["predicted_rent"]),
-        "predicted_price": float(result["predicted_price"]),
-        "annual_rent": float(result["annual_rent"]),
-        "gross_yield": float(result["gross_yield"]),
-        "gross_yield_percent": float(result["gross_yield_percent"]),
-    }
+    try:
+        result = calculate_roi(listing.dict())
+        # Ensure everything is JSON serializable (cast NumPy types to Python floats)
+        return {
+            "predicted_rent": float(result["predicted_rent"]),
+            "predicted_price": float(result["predicted_price"]),
+            "annual_rent": float(result["annual_rent"]),
+            "gross_yield": float(result["gross_yield"]),
+            "gross_yield_percent": float(result["gross_yield_percent"]),
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"ROI calculation failed: {str(e)}"
+        )
 
 
 frontend_dir = pathlib.Path(__file__).resolve().parent.parent / "frontend"

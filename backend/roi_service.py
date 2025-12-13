@@ -65,7 +65,11 @@ def load_models():
 
 
 # Try to load models on import
-load_models()
+try:
+    load_models()
+except Exception as e:
+    logger.error(f"Failed to load models on import: {e}")
+    models_loaded = True  # Mark as attempted to avoid repeated failures
 
 
 def preprocess_for_model(sample_dict: Dict[str, Any], feature_columns) -> xgb.DMatrix:
