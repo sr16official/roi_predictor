@@ -20,9 +20,9 @@ class Listing(BaseModel):
     localityName: str
     suburbName: str
     cityName: str
-    companyName: str
+    
     closest_metro_station_km: float
-    AP_dist_km: float
+    
     Aiims_dist_km: float
     NDRLW_dist_km: float
 
