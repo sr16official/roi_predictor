@@ -38,7 +38,12 @@ def preprocess_for_model(sample_dict: Dict[str, Any], feature_columns) -> xgb.DM
     - Return xgboost.DMatrix
     """
 
-    df = pd.DataFrame([sample_dict])
+    # Map API field names to model field names for housing model
+    processed_dict = sample_dict.copy()
+    if 'size_sq_ft' in processed_dict and 'area' not in processed_dict:
+        processed_dict['area'] = processed_dict['size_sq_ft']
+    
+    df = pd.DataFrame([processed_dict])
     df_encoded = pd.get_dummies(df, drop_first=True)
 
     # Align with training-time feature columns
