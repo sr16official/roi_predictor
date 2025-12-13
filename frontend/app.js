@@ -178,7 +178,6 @@ form.addEventListener("submit", async (event) => {
     elPredictedRent.textContent = data.predicted_rent.toFixed(2);
     elPredictedPrice.textContent = data.predicted_price.toFixed(2);
     elAnnualRent.textContent = data.annual_rent.toFixed(2);
-    elGrossYield.textContent = data.gross_yield.toFixed(4);
     elGrossYieldPercent.textContent = data.gross_yield_percent.toFixed(2) + "%";
 
     updateCharts(data);
