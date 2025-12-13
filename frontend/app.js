@@ -8,7 +8,6 @@ const emptyStateDiv = document.getElementById("empty-state");
 const elPredictedRent = document.getElementById("predicted_rent");
 const elPredictedPrice = document.getElementById("predicted_price");
 const elAnnualRent = document.getElementById("annual_rent");
-const elGrossYield = document.getElementById("gross_yield");
 const elGrossYieldPercent = document.getElementById("gross_yield_percent");
 
 let barChartInstance = null;
