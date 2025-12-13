@@ -27,7 +27,7 @@ class Listing(BaseModel):
     NDRLW_dist_km: float
 
 
-app = FastAPI(title="Rental ROI API", version="1.0.0")
+app = FastAPI(title="Rental ROI API", version="1.0.1")
 
 # Allow local frontend (file:// or localhost) during development
 app.add_middleware(
