@@ -141,9 +141,7 @@ form.addEventListener("submit", async (event) => {
     localityName: readText("localityName"),
     suburbName: readText("suburbName"),
     cityName: readText("cityName"),
-    companyName: readText("companyName"),
     closest_metro_station_km: readNumber("closest_metro_station_km"),
-    AP_dist_km: readNumber("AP_dist_km"),
     Aiims_dist_km: readNumber("Aiims_dist_km"),
     NDRLW_dist_km: readNumber("NDRLW_dist_km"),
   };
