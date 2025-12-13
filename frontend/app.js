@@ -136,8 +136,6 @@ form.addEventListener("submit", async (event) => {
     size_sq_ft: readNumber("size_sq_ft"),
     propertyType: readText("propertyType"),
     bedrooms: readNumber("bedrooms"),
-    latitude: readNumber("latitude"),
-    longitude: readNumber("longitude"),
     localityName: readText("localityName"),
     suburbName: readText("suburbName"),
     cityName: readText("cityName"),
@@ -145,6 +143,12 @@ form.addEventListener("submit", async (event) => {
     Aiims_dist_km: readNumber("Aiims_dist_km"),
     NDRLW_dist_km: readNumber("NDRLW_dist_km"),
   };
+
+  // Add latitude and longitude only if they have values
+  const latitude = readNumber("latitude");
+  const longitude = readNumber("longitude");
+  if (latitude !== null) payload.latitude = latitude;
+  if (longitude !== null) payload.longitude = longitude;
 
   const apiKey = readApiKey();
 
