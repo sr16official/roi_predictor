@@ -189,8 +189,7 @@ form.addEventListener("submit", async (event) => {
       emptyStateDiv.classList.add("hidden");
     }
   } catch (err) {
-    console.error(err);
-    messageDiv.textContent =
-      "Could not calculate ROI. Confirm the API is reachable and your API key is correct.";
+    console.error("API call failed:", err);
+    messageDiv.textContent = `API Error: ${err.message}`;
   }
 });
