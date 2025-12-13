@@ -13,6 +13,49 @@ const elGrossYieldPercent = document.getElementById("gross_yield_percent");
 let barChartInstance = null;
 let pieChartInstance = null;
 
+function formatIndianNumber(num) {
+  const numStr = num.toString();
+  
+  // Handle negative numbers
+  if (numStr.startsWith('-')) {
+    return '-' + formatIndianNumber(parseFloat(numStr.slice(1)));
+  }
+  
+  // For numbers less than 1000, just return as is
+  if (num < 1000) {
+    return numStr;
+  }
+  
+  // Split into integer and decimal parts
+  const parts = numStr.split('.');
+  let integerPart = parts[0];
+  const decimalPart = parts[1] ? '.' + parts[1] : '';
+  
+  // Indian number formatting: first 3 digits from right, then groups of 2
+  let result = '';
+  let len = integerPart.length;
+  
+  // Last 3 digits
+  if (len > 3) {
+    result = ',' + integerPart.slice(-3) + result;
+    integerPart = integerPart.slice(0, -3);
+    len = integerPart.length;
+    
+    // Then groups of 2 digits
+    while (len > 2) {
+      result = ',' + integerPart.slice(-2) + result;
+      integerPart = integerPart.slice(0, -2);
+      len = integerPart.length;
+    }
+    
+    result = integerPart + result;
+  } else {
+    result = integerPart;
+  }
+  
+  return result + decimalPart;
+}
+
 function readNumber(id) {
   const value = document.getElementById(id).value;
   return value === "" ? null : Number(value);
@@ -175,9 +218,9 @@ form.addEventListener("submit", async (event) => {
 
     const data = await response.json();
 
-    elPredictedRent.textContent = data.predicted_rent.toFixed(2);
-    elPredictedPrice.textContent = data.predicted_price.toFixed(2);
-    elAnnualRent.textContent = data.annual_rent.toFixed(2);
+    elPredictedRent.textContent = formatIndianNumber(data.predicted_rent.toFixed(2));
+    elPredictedPrice.textContent = formatIndianNumber(data.predicted_price.toFixed(2));
+    elAnnualRent.textContent = formatIndianNumber(data.annual_rent.toFixed(2));
     elGrossYieldPercent.textContent = data.gross_yield_percent.toFixed(2) + "%";
 
     updateCharts(data);
