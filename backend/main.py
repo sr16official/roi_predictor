@@ -15,8 +15,8 @@ class Listing(BaseModel):
     size_sq_ft: float
     propertyType: str
     bedrooms: int
-    latitude: float
-    longitude: float
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
     localityName: str
     suburbName: str
     cityName: str
