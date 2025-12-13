@@ -31,9 +31,21 @@ def load_models():
         return True
     
     try:
+        # Log the models directory path
+        logger.info(f"Looking for models in: {MODELS_DIR}")
+        logger.info(f"Directory exists: {MODELS_DIR.exists()}")
+        
+        # List all files in models directory
+        if MODELS_DIR.exists():
+            model_files = list(MODELS_DIR.glob("*"))
+            logger.info(f"Files in models directory: {[f.name for f in model_files]}")
+        
         # Load rent model
         rent_model_path = MODELS_DIR / "rent_price_model.json"
         rent_features_path = MODELS_DIR / "rent_feature_columns.joblib"
+        
+        logger.info(f"Rent model path: {rent_model_path}, exists: {rent_model_path.exists()}")
+        logger.info(f"Rent features path: {rent_features_path}, exists: {rent_features_path.exists()}")
         
         if rent_model_path.exists() and rent_features_path.exists():
             rent_model = xgb.Booster()
@@ -46,6 +58,9 @@ def load_models():
         # Load housing model
         house_model_path = MODELS_DIR / "housing_xgb_model.json"
         house_features_path = MODELS_DIR / "Housing_feature.joblib"
+        
+        logger.info(f"Housing model path: {house_model_path}, exists: {house_model_path.exists()}")
+        logger.info(f"Housing features path: {house_features_path}, exists: {house_features_path.exists()}")
         
         if house_model_path.exists() and house_features_path.exists():
             house_model = xgb.Booster()
