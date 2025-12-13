@@ -150,20 +150,22 @@ form.addEventListener("submit", async (event) => {
   if (latitude !== null) payload.latitude = latitude;
   if (longitude !== null) payload.longitude = longitude;
 
+  // API key is optional - proceed without validation
   const apiKey = readApiKey();
 
-  if (!apiKey) {
-    messageDiv.textContent = "Enter your API key to run inference.";
-    return;
-  }
-
   try {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    
+    // Only add API key header if it exists
+    if (apiKey) {
+      headers["X-API-Key"] = apiKey;
+    }
+
     const response = await fetch(`${API_BASE_URL}/calculate_roi`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-API-Key": apiKey,
-      },
+      headers: headers,
       body: JSON.stringify(payload),
     });
 
