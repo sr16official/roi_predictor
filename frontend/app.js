@@ -168,6 +168,35 @@ function updateCharts(data) {
   }
 }
 
+function addColorAnimation() {
+  const resultsContainer = document.getElementById("results");
+  resultsContainer.style.transition = "background-color 0.8s ease-in-out";
+  
+  // Create a subtle color animation
+  const colors = [
+    "rgba(59, 130, 246, 0.05)",  // Blue tint
+    "rgba(16, 185, 129, 0.05)",  // Green tint
+    "rgba(251, 191, 36, 0.05)",  // Yellow tint
+    "rgba(239, 68, 68, 0.05)",   // Red tint
+  ];
+  
+  let colorIndex = 0;
+  const animateColor = () => {
+    resultsContainer.style.backgroundColor = colors[colorIndex];
+    colorIndex = (colorIndex + 1) % colors.length;
+  };
+  
+  // Apply initial color and start animation
+  animateColor();
+  const colorInterval = setInterval(animateColor, 2000);
+  
+  // Stop animation after 8 seconds and reset to transparent
+  setTimeout(() => {
+    clearInterval(colorInterval);
+    resultsContainer.style.backgroundColor = "transparent";
+  }, 8000);
+}
+
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
@@ -226,6 +255,8 @@ form.addEventListener("submit", async (event) => {
     updateCharts(data);
 
     resultsDiv.classList.remove("hidden");
+    addColorAnimation(); // Add color animation when results are shown
+    
     if (emptyStateDiv) {
       emptyStateDiv.classList.add("hidden");
     }
